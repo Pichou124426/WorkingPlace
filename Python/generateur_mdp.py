@@ -23,39 +23,68 @@ def choix_longueur_mot_de_passe ():
             return nombre_caractere    
     except ValueError:
         print()
-        print ("La saisie renseigné n'est pas un entier.")
+        print ("La saisie renseigné n'est pas correcte !.")
         print()
         print ("--- Réesayer s'il vous plait ---")
         return choix_longueur_mot_de_passe ()
         
         
-longueur_du_mot_de_passe =  choix_longueur_mot_de_passe()
-
-
-
-
 
 
 #Fonction qui permet de choisir les symboles disponibles pour constituer le mot de passe : 
 
 def difficulté_mot_de_passe ():
-    print ("Quel(s) type(s) de caractére(s) voulez-vous dans votre mot de passe : (1 = Lettre et chiffre uniquement, 2 = Lettre, Chiffre et Characteres spéciaux ) ?")
-    saisie = input ("Choix fortement conseillé '2' :")
+    print()
+    print ("Choissisez les caractéres souhaités dans le mot de passe :")
+    print()
+    minuscule = input ("Utiliser des lettres minuscules ? (o/n) : ").lower()=="o"
+    majuscule = input ("Utiliser des lettres majuscules ? (o/n) : ").lower()=="o"
+    chiffre = input ("Utiliser des chiffres ? (o/n) : ").lower()=="o"
+    special_caractere = input ("Utiliser des caractéres spéciaux ? (o/n) : ").lower()=="o"
 
-    try : 
-        niveau_difficulté = int(saisie)
-        if niveau_difficulté == 1 : 
-            print ("TEST 1")
-        if niveau_difficulté == 2 :
-            print ("TEST 2")
-        
-        else : 
-            print ("La saisie n'est pas la bonne. ")
-            return difficulté_mot_de_passe ()
+
+    import string
+    alphabet = ""
+
+    if minuscule : 
+        alphabet += string.ascii_lowercase
+    if majuscule : 
+        alphabet += string.ascii_uppercase
+    if chiffre :
+        alphabet += string.digits
+    if special_caractere :
+        alphabet += string.punctuation
     
-    except ValueError:
-        print ("La saisie n'est pas la bonne. ")
-        return  difficulté_mot_de_passe()
+    if alphabet == "" :
+        print()
+        print ("Aucun type de caractére a été selectionné, veuillez en selectionner au moins un.")
+        return difficulté_mot_de_passe ()
+
+    return alphabet
+
+
+# Fonction qui utiliser les deux parametres longueur et caractere pour generer le mot de passe. 
+def construction_mot_de_passe (longueur,caractere) :
+    import random
+
+    nombre_de_catactere = longueur
+    nombre_aleatoire = random.randint(1,200)
+    choix_caractere = caractere*nombre_aleatoire
+    liste_lettre = list(choix_caractere)
+    random.shuffle(liste_lettre)
+    melange="".join(liste_lettre)
+
+    mot_de_passe = melange[:nombre_de_catactere]
+
+    return mot_de_passe
     
 
-difficulté_mot_de_passe ()
+ 
+
+
+longueur_du_mot_de_passe =  choix_longueur_mot_de_passe()
+caractere_disponible_mot_de_passe = difficulté_mot_de_passe ()
+mot_de_passe = construction_mot_de_passe (longueur_du_mot_de_passe,caractere_disponible_mot_de_passe)
+print()
+print(f"Voici votre mot de passe sécurisé : {mot_de_passe}")
+print()
